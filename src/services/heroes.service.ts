@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class HeroesService {
   private heroes: Heroe[] = [
     {
-      nombre: "Kameni",
+      nombre: "Kameni",  
       pais: "Africa",
       imgbody: "assets/img/africa_carlos_kameni_body.jpg",
       imgbodyblack: "assets/img/africa_carlos_kameni_body_back.jpg",
