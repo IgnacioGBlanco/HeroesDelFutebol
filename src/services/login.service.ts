@@ -35,6 +35,7 @@ export class LoginService {
       let user = this.usuario.user;
       console.log(user);
       this.writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+      this.generateFriendList(user.uid);
     });
 
   }
@@ -53,4 +54,10 @@ export class LoginService {
       profile_picture: imageUrl
     });
   }
+  generateFriendList(userId) {
+    firebase.database().ref('friends/' + userId).set({
+      friendsNumber:0
+    });
+  }
+
 }

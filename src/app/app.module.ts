@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler } from '@angular/core';
-
+import { FormsModule }   from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule,  } from 'angularfire2/database';
-import { AngularFireAuthModule} from 'angularfire2/auth';
+import { AngularFireDatabaseModule, } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -17,20 +18,25 @@ import { PaisesPage } from '../pages/paises/paises';
 import { EquipoPage } from '../pages/equipo/equipo';
 import { HeroePage } from '../pages/heroe/heroe';
 import { LoginPage } from '../pages/login/login';
+import { ListaAmigosPage } from '../pages/lista-amigos/lista-amigos';
 //services
-import {PaisesService} from '../services/paises.service';
-import {HeroesService} from '../services/heroes.service';
-import {LoginService} from '../services/login.service';
+import { PaisesService } from '../services/paises.service';
+import { HeroesService } from '../services/heroes.service';
+import { LoginService } from '../services/login.service';
+import { AmigosService } from '../services/amigos.service';
+
+//pipes
+import {KeysPipe} from '../pipes/keys.pipe';
 //AgularFire
 
 import { AuthService } from '../providers/auth-service';
 export const firebaseConfig = {
   apiKey: "AIzaSyDiRtjf5YU9Qee6_7_XZnZsEPFq3dnJYZs",
-     authDomain: "heroesdelfutbol-dc20e.firebaseapp.com",
-     databaseURL: "https://heroesdelfutbol-dc20e.firebaseio.com",
-     projectId: "heroesdelfutbol-dc20e",
-     storageBucket: "heroesdelfutbol-dc20e.appspot.com",
-     messagingSenderId: "670769318517"
+  authDomain: "heroesdelfutbol-dc20e.firebaseapp.com",
+  databaseURL: "https://heroesdelfutbol-dc20e.firebaseio.com",
+  projectId: "heroesdelfutbol-dc20e",
+  storageBucket: "heroesdelfutbol-dc20e.appspot.com",
+  messagingSenderId: "670769318517"
 };
 @NgModule({
   declarations: [
@@ -40,14 +46,18 @@ export const firebaseConfig = {
     EquipoPage,
     HeroePage,
     LoginPage,
-    TabsPage
+    ListaAmigosPage,
+    TabsPage,
+    KeysPipe
   ],
   imports: [
+    FormsModule,
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
-AngularFireDatabaseModule,
-AngularFireAuthModule
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -57,16 +67,17 @@ AngularFireAuthModule
     EquipoPage,
     HeroePage,
     LoginPage,
+    ListaAmigosPage,
     TabsPage
   ],
   providers: [
-  
+    AmigosService,
     LoginService,
     PaisesService,
     HeroesService,
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+export class AppModule { }
