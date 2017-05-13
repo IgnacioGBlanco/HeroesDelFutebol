@@ -19,6 +19,8 @@ import { EquipoPage } from '../pages/equipo/equipo';
 import { HeroePage } from '../pages/heroe/heroe';
 import { LoginPage } from '../pages/login/login';
 import { ListaAmigosPage } from '../pages/lista-amigos/lista-amigos';
+import { BuscarAmigosPage } from '../pages/buscar-amigos/buscar-amigos';
+
 //services
 import { PaisesService } from '../services/paises.service';
 import { HeroesService } from '../services/heroes.service';
@@ -27,9 +29,9 @@ import { AmigosService } from '../services/amigos.service';
 
 //pipes
 import {KeysPipe} from '../pipes/keys.pipe';
+
 //AgularFire
 
-import { AuthService } from '../providers/auth-service';
 export const firebaseConfig = {
   apiKey: "AIzaSyDiRtjf5YU9Qee6_7_XZnZsEPFq3dnJYZs",
   authDomain: "heroesdelfutbol-dc20e.firebaseapp.com",
@@ -47,6 +49,7 @@ export const firebaseConfig = {
     HeroePage,
     LoginPage,
     ListaAmigosPage,
+    BuscarAmigosPage,
     TabsPage,
     KeysPipe
   ],
@@ -68,6 +71,7 @@ export const firebaseConfig = {
     HeroePage,
     LoginPage,
     ListaAmigosPage,
+    BuscarAmigosPage,
     TabsPage
   ],
   providers: [

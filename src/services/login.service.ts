@@ -26,17 +26,15 @@ export class LoginService {
   }
   logIn() {
     // Start a sign in process for an unauthenticated user.
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(data => {
-      console.log(data)
+  return Observable.from(  this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(data => {
       this.usuario = data;
       localStorage.setItem('usuario', JSON.stringify(data))
       this.isLogued = true;
       this.appCtrl.getRootNav().setRoot(MyApp);
       let user = this.usuario.user;
-      console.log(user);
       this.writeUserData(user.uid, user.displayName, user.email, user.photoURL);
       this.generateFriendList(user.uid);
-    });
+    }));
 
   }
   logOut() {

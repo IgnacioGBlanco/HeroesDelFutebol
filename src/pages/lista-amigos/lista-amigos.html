@@ -7,30 +7,26 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>listaAmigos</ion-title>
+    <ion-title>lista Amigos</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <form>
 
+  <button type="button" ion-button block [navPush]="buscarAmigoPage">Busca Amigos</button>
 
-    <ion-item>
-      <ion-label floating>Username</ion-label>
-      <ion-input type="text"></ion-input>
-    </ion-item>
-  </form>
-  <button type="submit" ion-button block>Busca Amigos</button>
-  <button type="button" ion-button block>Busca Amigos Aleatorio</button>
   <ion-list>
-
-      <ion-avatar item-left>
-
-        <img [src]="amigos[k].profile_picture">
+    <ion-item *ngFor="let k of amigos|keys; let i = index" (click)="opcionesAmigo(amigos[k], k)">
+      <ion-avatar item-right>
+        <img [src]="amigosReciber.profile_picture">
       </ion-avatar>
-      <h2>{{amigos[k].username}}</h2>
+      <!-- [ngClass]="{'text-danger': amigos[k].amigo2 == userId, 'text-success':amigos[k].amigo2 != userId}" -->
+      <h2>{{amigosReciber.username}}</h2>
+      <h3 *ngIf="amigos[k].aceptada==true">Aceptada</h3>
+      <h3 *ngIf="amigos[k].aceptada==false">No Aceptada</h3>
+      <h4 *ngIf="amigos[k].amigo2 != userId">Envio</h4>
     </ion-item>
   </ion-list>
 </ion-content>

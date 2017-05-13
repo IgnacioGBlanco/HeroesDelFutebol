@@ -19,5 +19,5 @@ export class LoginPage {
   logIn() {
     this._loginService.logIn();
   }
-  
+
 }
