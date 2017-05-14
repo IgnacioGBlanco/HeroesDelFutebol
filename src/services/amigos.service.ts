@@ -32,8 +32,8 @@ export class AmigosService {
       );
   }
 
-  respuestaAmigo(idAmistad: string, amigo1: string, amigo2: string, aceptada: boolean) {
-    let body = { amigo1: amigo1, amigo2: amigo2, aceptada: aceptada, respondida: true };
+  respuestaAmigo(idAmistad: string,amigo1:string, amigo2:string ,aceptada: boolean) {
+    let body = {  respondida: true,amigo1,amigo2, aceptada:aceptada };
     let headers = new Headers({
       'content-type': 'application/json'
     })
@@ -75,6 +75,7 @@ export class AmigosService {
     // return this.http.get(url)
     //   .map(res => res.json());
   }
+
   eliminarAmigo(key: String) {
 
     let url = `${this.fireUrlFriendsAcepted}/${key}.json`

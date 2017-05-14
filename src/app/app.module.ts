@@ -20,13 +20,13 @@ import { HeroePage } from '../pages/heroe/heroe';
 import { LoginPage } from '../pages/login/login';
 import { ListaAmigosPage } from '../pages/lista-amigos/lista-amigos';
 import { BuscarAmigosPage } from '../pages/buscar-amigos/buscar-amigos';
-
+import {ChatPage} from '../pages/chat/chat';
 //services
 import { PaisesService } from '../services/paises.service';
 import { HeroesService } from '../services/heroes.service';
 import { LoginService } from '../services/login.service';
 import { AmigosService } from '../services/amigos.service';
-
+import { ChatService } from '../services/chat.service';
 //pipes
 import {KeysPipe} from '../pipes/keys.pipe';
 
@@ -50,6 +50,7 @@ export const firebaseConfig = {
     LoginPage,
     ListaAmigosPage,
     BuscarAmigosPage,
+    ChatPage,
     TabsPage,
     KeysPipe
   ],
@@ -72,9 +73,11 @@ export const firebaseConfig = {
     LoginPage,
     ListaAmigosPage,
     BuscarAmigosPage,
+    ChatPage,
     TabsPage
   ],
   providers: [
+    ChatService,
     AmigosService,
     LoginService,
     PaisesService,

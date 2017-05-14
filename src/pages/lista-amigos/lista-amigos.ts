@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { AmigosService } from '../../services/amigos.service';
 import { LoginService } from '../../services/login.service';
 import { BuscarAmigosPage } from '../buscar-amigos/buscar-amigos';
-import { ActionSheetController, AlertController } from 'ionic-angular';
+import { ChatPage } from '../chat/chat';
+import { NavController, ActionSheetController, AlertController } from 'ionic-angular';
 /**
  * Generated class for the ListaAmigos page.
  *
@@ -15,13 +16,16 @@ import { ActionSheetController, AlertController } from 'ionic-angular';
   templateUrl: 'lista-amigos.html',
 })
 export class ListaAmigosPage {
+  public rootPage = ChatPage;
   amigos: any[] = [];
-  amigosReciber:any[]= [];
+  amigosReciber: any[] = [];
   userId: string;
   friendId: string;
   textItem: string;
+  isSendingFriend: boolean;
   buscarAmigoPage = BuscarAmigosPage;
   constructor(private _amigosService: AmigosService,
+    public navCtrl: NavController,
     private _loginService: LoginService,
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController) {
@@ -29,85 +33,142 @@ export class ListaAmigosPage {
     this.buscarAmigos();
   }
 
-  respuestaAmigo() {
-    this._amigosService.respuestaAmigo("-KjrwfN2gK1SkehVs-Yp", "CMW6r4QDd9Ybfq14ub62CVq5U5C3", "Lr2FTf1YPgNNos3ZbrEqdCHbiPW2", false).subscribe(data => {
-      console.log(data);
 
-    });
-  }
   buscarAmigos() {
     this._amigosService.burcarAmigos(this.userId, "amigo1")
       .subscribe(data => {
-        for(let key$ in data){
+        console.log(data);
+        //  Paso de parentesis de objetos a corchete de objetos relaciones
+        for (let key$ in data) {
           let a = data[key$];
           a.key$ = key$;
-          this.amigos.push(data[key$ ]);
-
-        }
-        this._amigosService.burcarAmigos(this.userId, "amigo2")
-          .subscribe(data => {
-            //La data viene con un listado de objetos que hay que separar y hacer un listado de amigos
-        for(let key$ in data){
-          let a = data[key$];
-          a.key$ = key$;
-          this.amigos.push(data[key$ ]);
+          this.amigos.push(data[key$]);
 
         }
         console.log(this.amigos);
-            for(let k of this.amigos){
-                console.log(k["amigo2"]);
-this._amigosService.burcarAmigoPorId(k["amigo2"]).subscribe(
-  data=>{
 
-    this.amigosReciber = data;
+        this._amigosService.burcarAmigos(this.userId, "amigo2")
+          .subscribe(data2 => {
+            //La data viene con un listado de objetos que hay que separar y hacer un listado de amigos
+            console.log(data2);
 
-    console.log(  this.amigosReciber);
-  }
-);
+            console.log(this.amigos);
+            for (let key$ in data2) {
+              let a = data2[key$];
+              a.key$ = key$;
+              this.amigos.push(data2[key$]);
 
             }
+            console.log(this.amigos);
+            let i = 0;
+            for (let ka of this.amigos) {
+              this._amigosService.burcarAmigoPorId(ka["amigo2"]).subscribe(data => {
+                this.amigos[i].profile_picture = data['profile_picture'];
+                this.amigos[i].username = data['username'];
+                i++;
+              });
+            }
+          });
 
       });
-        // for (let datos in data) {
-        //   this._amigosService.burcarAmigoPorId(datos).subscribe(data => {
-        //     this.amigos.push(data);
-        //   })
-      //  }
-        //  this.amigos = data;
-      })
   }
+
   opcionesAmigo(amigo: any, k: string) {
     this.friendId = k;
     console.log(amigo)
     this.presentActionSheet(amigo, k);
   }
-  presentActionSheet(amigo: any, keyFriend: string) {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: `Acciones con ${amigo.username} `,
-      buttons: [
-        {
-          text: 'Eliminar',
-          role: 'destructive',
-          handler: () => {
-            console.log('Destructive clicked');
-            this.eliminarAmigo(keyFriend);
+  presentActionSheet(amigo: any, k: string) {
+
+    this.elegirBotones(amigo, k);
+
+  }
+  elegirBotones(amigo: any, k: string) {
+    if (amigo.aceptada == true) {
+      let actionSheet = this.actionSheetCtrl.create({
+        title: `Acciones con ${amigo.username} `,
+        buttons: [
+          {
+
+            text: 'Eliminar',
+            role: 'destructive',
+            handler: () => {
+              console.log('Destructive clicked');
+              this.eliminarAmigo(k);
+            }
+          }, {
+            text: 'Chat',
+            handler: () => {
+              //  this.nuevoAmigo()
+              this.navCtrl.push(this.rootPage);
+            }
+          },
+
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
           }
-        }, {
-          text: 'Solicitar',
-          handler: () => {
-            //  this.nuevoAmigo()
-            console.log('Archive clicked');
-          }
-        }, {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        }
-      ]
-    });
-    actionSheet.present();
+        ]
+      });
+      actionSheet.present();
+    } else
+      if (amigo.amigo2 == this.userId) {
+        let actionSheet = this.actionSheetCtrl.create({
+          title: `Acciones con ${amigo.username} `,
+          buttons: [
+            {
+
+              text: 'Eliminar',
+              role: 'destructive',
+              handler: () => {
+                console.log('Destructive clicked');
+                this.eliminarAmigo(k);
+              }
+            }, {
+              text: 'Responder',
+              handler: () => {
+                //  this.nuevoAmigo()
+                this.showConfirm(amigo);
+              }
+            },
+
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel clicked');
+              }
+            }
+          ]
+        });
+        actionSheet.present();
+      } else {
+        let actionSheet = this.actionSheetCtrl.create({
+          title: `Acciones con ${amigo.username} `,
+          buttons: [
+            {
+              text: 'Eliminar',
+              role: 'destructive',
+              handler: () => {
+                console.log('Destructive clicked');
+                this.eliminarAmigo(k);
+              }
+            },
+
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel clicked');
+              }
+            }
+          ]
+        });
+        actionSheet.present();
+      }
   }
   eliminarAmigo(keyFriend: string) {
     this._amigosService.eliminarAmigo(keyFriend).subscribe(data => {
@@ -128,4 +189,28 @@ this._amigosService.burcarAmigoPorId(k["amigo2"]).subscribe(
     });
     alert.present();
   }
+  showConfirm(amigo: any) {
+    console.log(amigo);
+    let confirm = this.alertCtrl.create({
+      title: 'amigo.username',
+      message: 'aceptas a amigo.username?',
+      buttons: [
+        {
+          text: 'Denegar',
+          handler: () => {
+            this._amigosService.respuestaAmigo(amigo.key$, amigo.amigo1, amigo.amigo2, false).subscribe();
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            console.log(amigo.key$);
+            this._amigosService.respuestaAmigo(amigo.key$, amigo.amigo1, amigo.amigo2, true).subscribe();
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
 }

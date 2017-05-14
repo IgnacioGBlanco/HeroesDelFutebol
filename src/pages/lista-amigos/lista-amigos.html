@@ -20,13 +20,16 @@
   <ion-list>
     <ion-item *ngFor="let k of amigos|keys; let i = index" (click)="opcionesAmigo(amigos[k], k)">
       <ion-avatar item-right>
-        <img [src]="amigosReciber.profile_picture">
+        <img [src]="amigos[k].profile_picture">
       </ion-avatar>
       <!-- [ngClass]="{'text-danger': amigos[k].amigo2 == userId, 'text-success':amigos[k].amigo2 != userId}" -->
-      <h2>{{amigosReciber.username}}</h2>
+      <h2>{{amigos[k].username}}</h2>
+      <h4 *ngIf="amigos[k].amigo2 != userId">Envio</h4>
+      <h4 *ngIf="amigos[k].amigo2 == userId">Recibo</h4>
       <h3 *ngIf="amigos[k].aceptada==true">Aceptada</h3>
       <h3 *ngIf="amigos[k].aceptada==false">No Aceptada</h3>
-      <h4 *ngIf="amigos[k].amigo2 != userId">Envio</h4>
+      <h3 *ngIf="amigos[k].aceptada==false && amigos[k].respondida == true">Rechazada</h3>
+
     </ion-item>
   </ion-list>
 </ion-content>
